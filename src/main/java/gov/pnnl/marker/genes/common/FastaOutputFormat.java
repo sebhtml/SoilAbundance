@@ -16,7 +16,6 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 /**
- * @author nord229
  *
  */
 public class FastaOutputFormat extends FileOutputFormat<NullWritable, Text> {
