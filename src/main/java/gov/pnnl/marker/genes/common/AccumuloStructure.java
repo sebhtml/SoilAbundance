@@ -9,6 +9,11 @@ public class AccumuloStructure {
 
     public static final String SPSEP = "__SPSEP__";
     public static final String NLSEP = "__NLSEP__";
+    public static final int    AA_MD5_OFFSET   =  0;    //  Protein MD5 offset in CSV file
+    public static final int    SEQ_NAME_OFFSET =  3;    //  Sequence Name offset in CSV file
+    public static final int    SCORE_OFFSET    =  5;    //  HMM bit score offset in CSV file
+    public static final int    PP_OFFSET       = 11;    //  Posterior Probability offset in CSV file
+    public static final int    PCTCOV_OFFSET   = 19;    //  Percent Coverage offset in CSV file
 }
 
 /*

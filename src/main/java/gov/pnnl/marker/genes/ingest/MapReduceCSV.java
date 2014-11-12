@@ -42,10 +42,11 @@ public class MapReduceCSV extends Configured implements Tool {
             final CSVParser parser = new CSVParser();
             final String[] fields = parser.parseLine(value.toString());
 
-            final Mutation mutation = new Mutation(fields[0]);
+            final Mutation mutation = new Mutation(fields[AccumuloStructure.AA_MD5_OFFSET]);
             mutation.put(fields[1], "data", generateFastaRecord(fields));
-            mutation.put(fields[1], "post_prob", fields[11]);
-            mutation.put(fields[1], "score", fields[5]);
+            mutation.put(fields[1], "post_prob", fields[AccumuloStructure.PP_OFFSET]);
+            mutation.put(fields[1], "score", fields[AccumuloStructure.SCORE_OFFSET]);
+            mutation.put(fields[1], "pctcov", fields[AccumuloStructure.PCTCOV_OFFSET]);
 
             output.write(null, mutation);
 
@@ -55,16 +56,16 @@ public class MapReduceCSV extends Configured implements Tool {
     private static String generateFastaRecord(final String[] fields) {
         final StringBuilder sb = new StringBuilder();
 
-        sb.append('>');
-        sb.append(fields[3]);
-        sb.append(AccumuloStructure.SPSEP);
+        sb.append('>');                                         // The start of a FASTA record
+        sb.append(fields[AccumuloStructure.SEQ_NAME_OFFSET]);   // Then name of the sequence
+        sb.append(AccumuloStructure.SPSEP);                     // Whitespace
         for (int i = 0; i < (fields.length - 2); i++) {
-            sb.append(fields[i]);
+            sb.append(fields[i]);                               // Append the HMM metadata as a comment
             sb.append(',');
         }
         sb.append(fields[fields.length - 2]);
-        sb.append(AccumuloStructure.NLSEP);
-        sb.append(fields[fields.length - 1]);
+        sb.append(AccumuloStructure.NLSEP);                     // Append a newline marker
+        sb.append(fields[fields.length - 1]);                   // Append the actual sequence
 
         return sb.toString();
     }
@@ -83,7 +84,7 @@ public class MapReduceCSV extends Configured implements Tool {
 
         job.setMapperClass(MapClass.class);
 
-        job.setNumReduceTasks(0);
+        job.setNumReduceTasks(0);                               // We don't need a reducer
 
         job.setOutputFormatClass(AccumuloOutputFormat.class);
         job.setOutputKeyClass(Text.class);
